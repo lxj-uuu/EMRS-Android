@@ -1,0 +1,163 @@
+unit lx6;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ComCtrls, ExtCtrls;
+
+type
+  TForm6 = class(TForm)
+    tishi: TStatusBar;
+    GroupBox1: TGroupBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label10: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label11: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Edit1: TEdit;
+    TrackBar1: TTrackBar;
+    Panel1: TPanel;
+    TrackBar2: TTrackBar;
+    Edit2: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    Label29: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure TrackBar2Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form6: TForm6;
+
+implementation
+
+uses lx1, lx3;
+
+{$R *.DFM}
+
+procedure TForm6.Button2Click(Sender: TObject);
+var
+  F: TextFile;
+  sstr1:string;
+begin
+  sstr1:=form3.xmbs.text;
+  AssignFile(F,'c:\emrs\gzcs.txt');
+  Rewrite(F);
+  writeln(F,form3.xmmc.text);
+  writeln(F,sstr1[1]);
+  writeln(F,form3.xianhao.text);
+  writeln(f,form3.dianhao.text);
+  writeln(f,form3.gongquan.text);
+  writeln(f,form3.cequan.text);
+  writeln(f,form3.czy.text);
+  writeln(f,form3.combobox1.text);
+  writeln(f,form3.combobox2.text);
+  writeln(f,form6.edit2.text);  // xin zengjia
+  writeln(f,form3.gqh.text);
+  writeln(f,form3.czydm.text);
+  writeln(f,form3.bl.text);
+  writeln(f,form3.jsfs.text);
+  writeln(f,form3.wjlj.text);
+  writeln(f,form3.lbcs2.text);
+  writeln(f,form3.lbcs3.text);
+  writeln(f,form3.lbcs4.text);
+  writeln(f,form3.lbcs5.text);
+  CloseFile(F);
+  form6.hide;
+  form1.show;
+end;
+
+procedure TForm6.Button1Click(Sender: TObject);
+var
+  shedingvab:real;
+  sheding:integer;
+  sheding_h,sheding_l:byte;
+begin
+  tishi.simpletext:='正在充电!请稍等...';
+  send[1]:=$A0;
+  send[2]:=$A0;
+  send[3]:=$04;
+  if edit2.text='' then edit2.text:='0';
+  shedingvab:=strtofloat(edit2.text);
+
+ // vab:=((msg[2] and $3)*256+msg[3])/1023*50;
+
+  sheding:=trunc(shedingvab/50*1023);
+  sheding_h:=((sheding div 256) and 3);
+  sheding_l:=sheding mod 256;
+
+  send[4]:=sheding_h;
+  send[5]:=sheding_l;
+  send[6]:=send[3] xor send[4] xor send[5];
+  send[7]:=$Af;
+  send[8]:=$Af;
+  form1.Comm1.write(send,8);
+  waiting_ack:=true;
+  resend_count:=1;
+  form1.timer3.interval:=3000;
+  form1.Timer3.enabled:=true;
+
+end;
+
+procedure TForm6.Edit2Change(Sender: TObject);
+begin
+  vab:=strtofloat(edit2.text);
+  if vab<0 then vab:=0;
+  if vab>60 then vab:=60;
+//  vab:=trunc(vab*100)/100;
+//  form6.edit2.text:=floattostr(vab);
+  trackbar2.position:=trunc(vab/60*120+0.5);
+//  button1.setfocus;
+end;
+
+procedure TForm6.TrackBar2Change(Sender: TObject);
+begin
+  if trackbar2.focused=true then
+    begin
+      vab:=trackbar2.position/120*60;
+      vab:=trunc(vab*100)/100;
+      form6.edit2.text:=floattostr(vab);
+    end;
+//  button1.setfocus;
+end;
+
+procedure TForm6.FormCreate(Sender: TObject);
+begin
+  form6.edit2.text:=tmpvab;
+end;
+
+end.

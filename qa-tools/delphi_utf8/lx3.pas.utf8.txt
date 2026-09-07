@@ -1,0 +1,277 @@
+unit lx3;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, Tabnotbk, StdCtrls;
+
+type
+  TForm3 = class(TForm)
+    TabbedNotebook1: TTabbedNotebook;
+    Label6: TLabel;
+    xianhao: TEdit;
+    Label7: TLabel;
+    dianhao: TEdit;
+    Label8: TLabel;
+    gongquan: TEdit;
+    Label9: TLabel;
+    cequan: TEdit;
+    Button1: TButton;
+    Label10: TLabel;
+    Label11: TLabel;
+    ComboBox1: TComboBox;
+    ComboBox2: TComboBox;
+    Label1: TLabel;
+    czy: TEdit;
+    tishi: TStatusBar;
+    Label2: TLabel;
+    xmmc: TEdit;
+    Label3: TLabel;
+    xmbs: TEdit;
+    Label4: TLabel;
+    zyjg: TEdit;
+    Label5: TLabel;
+    Label12: TLabel;
+    jsfs: TComboBox;
+    Label13: TLabel;
+    gqh: TEdit;
+    Label14: TLabel;
+    czydm: TEdit;
+    Label15: TLabel;
+    wjlj: TEdit;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    lbcs2: TComboBox;
+    lbcs3: TComboBox;
+    lbcs4: TComboBox;
+    lbcs5: TComboBox;
+    Button2: TButton;
+    Label20: TLabel;
+    mddl: TComboBox;
+    Label21: TLabel;
+    bl: TComboBox;
+    procedure Button1Click(Sender: TObject);
+    procedure TabbedNotebook1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form3: TForm3;
+
+implementation
+
+uses lx1, lx5, lx6;
+
+{$R *.DFM}
+
+procedure TForm3.Button1Click(Sender: TObject);
+var
+  i,j,k,sum:integer;
+  sstr:string;
+  f:TextFile;
+begin
+  form3.hide;
+ // prg_no:=2;//strtoint(combobox1.text);   2003-6-6
+  prg_no:=strtoint(combobox1.text);      // 2006-11-19
+  exprmt_times:=strtoint(combobox2.text);
+  img_w:=form5.paintbox1.width;
+  img_h:=form5.paintbox1.height;
+  case prg_no of
+  1: begin
+      points:=22;
+      k:=1;
+      points_end1:=253;
+      points_end:=253; // points_end = points*(1+points)/2
+      point_no:=242.5; // points_no = points_end-(points-1)/2
+      ruler_h[1]:=trunc(0*img_w/point_no);
+     end;
+  2: begin
+      points:=28;
+      k:=1;
+      points_end1:=406;
+      points_end:=406; // points_end = points*(1+points)/2
+      point_no:=392.5; // points_no = points_end-(points-1)/2
+      ruler_h[1]:=trunc(0*img_w/point_no);
+     end;
+  3: begin
+      points:=34;
+      k:=1;
+      points_end1:=595;
+      points_end:=595;  // points_end = points*(1+points)/2
+      point_no:=578.5;  // points_no = points_end-(points-1)/2
+      ruler_h[1]:=trunc(0*img_w/point_no);
+     end;
+  4: begin
+      points:=40;
+      k:=1;
+      points_end1:=820;
+      points_end:=820;   // points_end = points*(1+points)/2
+      point_no:=800.5;   // points_no = points_end-(points-1)/2
+      ruler_h[1]:=trunc(0*img_w/point_no);
+     end;
+  end;
+  for i:=2 to points do
+    begin
+      sum:=0;
+      for j:=1 to i do
+        begin
+          k:=k+1;
+          sum:=sum+k;
+        end;
+      ruler_h[i]:=trunc((sum/i-1)*img_w/point_no);
+    end;
+  sstr:=xmbs.text;
+  AssignFile(F,'c:\emrs\gzcs.txt');
+  Rewrite(F);
+  writeln(F,xmmc.text);
+  writeln(F,sstr[1]);
+  writeln(F,xianhao.text);
+  writeln(f,dianhao.text);
+  writeln(f,gongquan.text);
+  writeln(f,cequan.text);
+  writeln(f,czy.text);
+  writeln(f,combobox1.text); //
+  writeln(f,combobox2.text);
+  writeln(f,form6.edit2.text); // xin zengjia
+  writeln(f,gqh.text);
+  writeln(f,czydm.text);
+  writeln(f,bl.text);
+  writeln(f,jsfs.text);
+  writeln(f,wjlj.text);
+  writeln(f,lbcs2.text);
+  writeln(f,lbcs3.text);
+  writeln(f,lbcs4.text);
+  writeln(f,lbcs5.text);
+  CloseFile(F);
+  wjljv:=wjlj.text;
+  if (old_xmbs<>xmbs.text) or (old_xianhao<>xianhao.text) then
+    begin
+      AssignFile(F,wjljv+xmbs.text+xianhao.text+'.txt');
+      Rewrite(F);
+      writeln(f,xmmc.text);
+      CloseFile(F);
+      old_xmbs:=xmbs.text;
+      old_xianhao:=xianhao.text;
+    end;
+  form5.xxh.text:=xianhao.text;
+  form5.ddh.text:=dianhao.text;
+  form1.show;
+end;
+
+procedure TForm3.TabbedNotebook1Click(Sender: TObject);
+begin
+  if tabbednotebook1.pageindex=0 then xmmc.setfocus
+     else combobox1.SetFocus;
+end;
+
+procedure TForm3.FormCreate(Sender: TObject);
+var
+  tmp:string;
+  f:textfile;
+begin
+  tishi.simpletext:='项目名称可以是汉字或英文字母，字数不限；项目标识则只能是一个英文字母。';
+  AssignFile(F,'c:\emrs\gzcs.txt');
+  Reset(F);
+  Readln(F,tmp);
+  if tmp<>'' then xmmc.text:=tmp;
+  Readln(F,tmp);
+  if tmp<>'' then xmbs.text:=tmp;
+  Readln(F,tmp);
+  if tmp<>'' then xianhao.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then dianhao.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then gongquan.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then cequan.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then czy.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then combobox1.text:='1';// tmp;  2003-6-6
+  readln(f,tmp);
+  if tmp<>'' then combobox2.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then tmpvab:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then gqh.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then czydm.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then bl.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then jsfs.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then wjlj.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then lbcs2.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then lbcs3.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then lbcs4.text:=tmp;
+  readln(f,tmp);
+  if tmp<>'' then lbcs5.text:=tmp;
+  CloseFile(F);
+  old_xmbs:=xmbs.text;
+  old_xianhao:=xianhao.text;
+end;
+
+procedure TForm3.Button2Click(Sender: TObject);
+var
+  F: TextFile;
+  k,i,j,sum:integer;
+begin
+  // prg_no:=2;  // strtoint(combobox1.text)  2003-6-6
+  prg_no:=strtoint(combobox1.text); // 2005-11-19, 2006-9-3, 2006-11-19
+  case prg_no of
+  1: begin
+       points:=22;
+     end;
+  2: begin
+       points:=28;
+     end;
+  3: begin
+       points:=34;
+     end;
+  4: begin
+       points:=40;
+     end;
+  end;
+      k:=1;
+      shjian[1]:=1*0.08;    //prog_no=1,2,3,4
+    {
+        if points>=22 then    //prog_no=4, no use
+        begin
+          k:=2;
+          shjian[1]:=2*0.08;
+        end;
+     }
+      for i:=2 to points do
+        begin
+          sum:=0;
+          for j:=1 to i do
+            begin
+              k:=k+1;
+              sum:=sum+k;
+            end;
+          shjian[i]:=sum/i*0.08;
+        end;
+  AssignFile(F,wjljv+'zygs'+'.txt');  //  +combobox1.text  2003-6-6
+  Rewrite(F); //single/dauble wave,dao shu,bian kuang,zhongxin/chongdit
+  if jsfs.text='重叠' then writeln(F,2,' ',points,' ',strtoint(gongquan.text),' ',0)
+    else writeln(F,2,' ',points,' ',strtoint(gongquan.text),' ',1);
+  if jsfs.text='中心' then writeln(F,strtoint(cequan.text));//jieshou mianji
+  writeln(F,4,' ',0.02);//gongdian maikuan,guanduan shijian
+  for i:=1 to points do
+    writeln(F,shjian[i]);
+  CloseFile(F);
+end;
+
+end.

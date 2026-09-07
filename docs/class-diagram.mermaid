@@ -1,0 +1,188 @@
+classDiagram
+    class MainActivity {
+        +onCreate()
+        -initSerial()
+        -initScreens()
+    }
+    class AppState {
+        +Int prgNo
+        +Int supplyTimes
+        +Int points
+        +Int pointsEnd1
+        +Double pointNo
+        +IntArray ruler_h
+        +DoubleArray shjian
+        +Array~DoubleArray~ v2value
+        +DoubleArray v2, v2i, biaoding, displ, zhengyan, iabAve
+        +Boolean keSjcl, keCunpan, cppd, agnexit, waitingAck
+        +String mode /*bd|cl*/
+        +WorkParams work
+        +Double targetVab
+        +fun resetSession()
+    }
+    class StatusHub {
+        +subscribe(screen, observer)
+        +postText(text)
+        +beep()
+    }
+    class ScreenManager {
+        +Map~String, View~ screens
+        +show(screen)
+        +back()
+    }
+    class WorkParams {
+        +String projectName
+        +String projectTag
+        +String lineNo
+        +String pointNo
+        +String loopSide
+        +String coilArea
+        +String operatorName
+        +Int prgNo
+        +Int supplyTimes
+        +String targetVab
+        +String workAreaNo
+        +String operatorCode
+        +String ratio
+        +String receiveMode
+        +String dataDir
+        +IntArray filterNo
+    }
+    class SerialPortJni {
+        <<external>>
+        +open(path,baud,data,parity,stop)$ Int
+        +read(fd,buf,len)$ Int
+        +write(fd,buf,len)$ Int
+        +close(fd)$
+        +listPorts()$ Array~String~
+    }
+    class SerialPortManager {
+        -fd: Int
+        -rxThread: Thread
+        +open(config): Result
+        +close()
+        +write(bytes)
+        -rxLoop()
+    }
+    class RootHelper {
+        +isRootAvailable() Boolean
+        +grantDevice(path) Boolean
+    }
+    class FrameCodec {
+        +selfTestFrame()$ ByteArray
+        +selfTestStopFrame()$ ByteArray
+        +supplyFrame(times)$ ByteArray
+        +chargeEnterFrame()$ ByteArray
+        +chargeFrame(targetVab)$ ByteArray
+        +ackFrame(repeat)$ ByteArray
+        +nakFrame()$ ByteArray
+    }
+    class RxFrameParser {
+        -msg: ByteArray
+        -len: Int
+        -haveHead: Boolean
+        +feed(bytes, sink)
+    }
+    class ProtocolEngine {
+        -handlerThread: HandlerThread
+        +send(cmd)
+        +onRxBytes(chunk)
+        -onAck()
+        -startWatchdog(ms)
+        -scheduleResend()
+        +listener: EngineListener
+    }
+    class EngineListener {
+        <<interface>>
+        +onAck(cmd)
+        +onStatusFrame(type, vab, batt)
+        +onShot(shot)
+        +onSupplyFinished()
+        +onComError(kind)
+        +onWatchdogTimeout()
+    }
+    class Decode {
+        +decodeDataFrame(payload, mddl, ratio)$ ShotData
+        +scale14(h,l)$ Double
+        +currentScale(h,l,mddl)$ Double
+    }
+    class ProcessPipeline {
+        +runMeasure(state, params): ProcessOutput
+        +runCalibration(state, params, zhengyan): ProcessOutput
+    }
+    class Smoothing {
+        +smooth5_3(a, iab, times, len, filterNo)$
+    }
+    class ReplaceAve {
+        +replaceAve(a, times, len)$ DoubleArray
+    }
+    class SparseAve {
+        +sparseAve(v2, points)$ DoubleArray
+    }
+    class Normalize {
+        +normalizeI(v2i, averageI)$
+    }
+    class Series {
+        +specOf(prg)$ ProgramSpec
+        +computeTimesAndRuler(spec, imgW)$ Pair~DoubleArray,IntArray~
+    }
+    class TextFileIO {
+        +writeLinesGbk(path, lines)$
+        +readLinesGbk(path)$ List~String~
+        +formatDelphiReal(d)$ String
+    }
+    class GzcsStore {
+        +load(state, prefs)$
+        +save(state, dir)$
+    }
+    class CalibrationStore {
+        +read(dir)$ Pair~Int,DoubleArray~
+        +write(dir, points, coeffs)$
+    }
+    class ResultFiles {
+        +saveMeasureResults(state, params, biaoding)$ List~String~
+        +saveCalibration(state, params, biaoding)$
+        +writeZygs(...)$
+        +readZyjg(...)$ Pair~DoubleArray,DoubleArray~
+    }
+    class ProjectStore {
+        +ensureProjectFile(state)$
+        +appendPoint(state)$
+    }
+    class FileImport {
+        +importFromSaf(uri)$
+    }
+    class ShareExport {
+        +shareFile(path)$
+    }
+
+    MainActivity --> ScreenManager
+    MainActivity --> AppState
+    MainActivity --> ProtocolEngine
+    MainActivity --> StatusHub
+    ScreenManager --> StatusHub
+    ProtocolEngine --> RxFrameParser
+    ProtocolEngine --> FrameCodec
+    ProtocolEngine ..|> EngineListener
+    SerialPortManager --> SerialPortJni
+    SerialPortManager --> RootHelper
+    ProtocolEngine --> SerialPortManager
+    ProtocolEngine --> Decode
+    MainScreen ..|> EngineListener
+    SupplyScreen ..|> EngineListener
+    SelfTestScreen ..|> EngineListener
+    ChargeScreen ..|> EngineListener
+    ProcessPipeline --> Smoothing
+    ProcessPipeline --> ReplaceAve
+    ProcessPipeline --> SparseAve
+    ProcessPipeline --> Normalize
+    ProcessPipeline --> Series
+    GzcsStore --> WorkParams
+    GzcsStore --> TextFileIO
+    ResultFiles --> TextFileIO
+    ProjectStore --> TextFileIO
+    CalibrationStore --> TextFileIO
+    AppState --> WorkParams
+    MainScreen --> AppState
+    SetupScreen --> WorkParams
+    SupplyScreen --> AppState

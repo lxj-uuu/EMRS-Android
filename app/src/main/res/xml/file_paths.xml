@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- App 外部私有数据目录（getExternalFilesDir/emrs），导出/分享用 -->
+    <external-files-path
+        name="emrs_data"
+        path="emrs/" />
+    <external-files-path
+        name="emrs_root"
+        path="." />
+</paths>

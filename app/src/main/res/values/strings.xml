@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EMRS 采集</string>
+
+    <!-- ============ 主界面（Form1） ============ -->
+    <string name="main_title_emrs">EMRS-2B</string>
+    <string name="main_title_sub">型微机电磁勘探仪</string>  <!-- ⚠是否缺首字待客户确认（规格书 §6.3-问5） -->
+    <string name="main_title_inst">西安强源物探研究所</string>
+    <string name="btn_selftest">自 检</string>
+    <string name="btn_charge">充 电</string>
+    <string name="btn_setup">设 置</string>
+    <string name="btn_calib">标 定</string>
+    <string name="btn_measure">测 量</string>
+    <string name="btn_exit">结束</string>
+    <string name="btn_show_wave">显示波形</string>
+    <string name="status_please_click">请点击所需功能的按键</string>
+    <string name="exit_confirm">确定要退出程序吗？</string>
+    <string name="dialog_ok">确定</string>
+    <string name="dialog_cancel">取消</string>
+
+    <!-- ============ 通用 ============ -->
+    <string name="btn_return">返  回</string>
+    <string name="btn_exit2">退  出</string>
+    <string name="status_sending">正在发命令...</string>
+    <string name="status_selftesting">正在自检...</string>
+    <string name="status_comm_fault">通信有故障！</string>
+    <string name="status_no_ack">未收到采样机应答！</string>
+    <string name="status_comm_lost">通信中断！</string>
+    <string name="status_data_loss">数据有丢失！</string>
+    <string name="status_supplying">正在供电、测量...</string>
+    <string name="status_supply_done">供电完毕；可进行数据处理。</string>
+    <string name="status_please_supply">请点击供电开始键，以正式供电、测量！</string>
+    <string name="status_no_data">无数据可处理,请先进行供电、测量！</string>
+    <string name="status_please_process">请点击处理测量数据键，以进行五点三次平滑、替位平均以及疏密平均!</string>
+    <string name="status_please_calib">请点击计算标定系数键，以进行标定！</string>
+    <string name="status_calculating">正在进行计算...</string>
+    <string name="status_process_done">数据处理完毕；若结果满意，可以存盘。</string>
+    <string name="status_save_ok">数据存盘成功！可设置新的线号、点号，并供电测量；点击返回键可返回主菜单。</string>
+    <string name="status_not_saved">数据尚未存盘!!!</string>
+    <string name="status_nothing_save">无数据可存！</string>
+    <string name="status_dao_mismatch">道数不一致！</string>
+    <string name="status_read_bd_fail">读取标定文件失败，无法进行测量！</string>
+    <string name="unit_v">V</string>
+
+    <!-- ============ 设置（Form3） ============ -->
+    <string name="tab_header">图头设置</string>
+    <string name="tab_params">参数设置</string>
+    <string name="tab_serial">串口设置</string>
+    <string name="label_project_name">项目名称</string>
+    <string name="label_project_tag">项目标识</string>
+    <string name="label_work_area">工区号</string>
+    <string name="label_forward_file">正演文件</string>
+    <string name="label_line_no">线号</string>
+    <string name="label_point_no">点号</string>
+    <string name="label_loop_side">供圈边长</string>
+    <string name="label_coil_area">接收面积</string>
+    <string name="label_operator_name">操作员姓名</string>
+    <string name="label_operator_code">操作员代码</string>
+    <string name="label_file_path">文件路径</string>
+    <string name="label_prog_no">程序编号</string>
+    <string name="label_supply_times">供电次数</string>
+    <string name="label_ratio">倍    率</string>
+    <string name="label_receive_mode">接收方式</string>
+    <string name="label_filter_1e2">1E2滤波次数</string>
+    <string name="label_filter_1e1">1E1滤波次数</string>
+    <string name="label_filter_1e0">1E0滤波次数</string>
+    <string name="label_filter_1em1">1E-1滤波次数</string>
+    <string name="label_full_current">满档电流</string>
+    <string name="btn_gen_forward">生成正演格式</string>
+    <string name="status_setup_hint">项目名称可以是汉字或英文字母，字数不限；项目标识则只能是一个英文字母。</string>
+    <string name="serial_device">串口设备</string>
+    <string name="serial_baud">波特率</string>
+    <string name="btn_serial_restore">恢复默认串口参数</string>
+    <string name="btn_serial_refresh">刷新串口列表</string>
+    <string name="serial_open_fail">串口打开失败：%1$s</string>
+    <string name="serial_open_ok">串口已打开：%1$s</string>
+    <string name="serial_unavailable">串口不可用：%1$s。请以 root 执行 chmod 666 该设备，或将本应用安装为系统应用。</string>
+
+    <!-- ============ USB-OTG 串口（USB增量） ============ -->
+    <string name="serial_conn_type">连接方式</string>
+    <string name="conn_native">原生串口</string>
+    <string name="conn_usb">USB-OTG</string>
+    <string name="usb_device">USB 设备</string>
+    <string name="btn_usb_refresh">刷新 USB 设备</string>
+    <string name="btn_usb_connect">授权并连接</string>
+    <string name="usb_none_detected">未检测到可识别的 USB 串口设备（支持 CH340 / FTDI / CP210x / PL2303），请检查 OTG 线与供电。</string>
+    <string name="usb_chip_unsupported">该设备为未知芯片，暂不支持。</string>
+
+    <!-- ============ 自检（Form2） ============ -->
+    <string name="selftest_group">自检结果</string>
+    <string name="battery_voltage">电池电压</string>
+
+    <!-- ============ 供电测量/数据处理（Form5） ============ -->
+    <string name="supply_page_title">各次供电电流的平均值(A)</string>
+    <string name="supplied_current">已供电流</string>
+    <string name="unit_times">次</string>
+    <string name="btn_supply_start">供 电 开 始</string>
+    <string name="label_line">线号</string>
+    <string name="label_point">点号</string>
+    <string name="btn_process_measure">处理测量数据</string>
+    <string name="btn_save_measure">存储处理结果</string>
+    <string name="btn_calc_calib">计算标定系数</string>
+    <string name="btn_save_calib">存储标定系数</string>
+    <string name="axis_unit">uV/A</string>
+    <string name="legend_pos">正值 --</string>
+    <string name="legend_neg">负值 --</string>
+    <string name="legend_forward_pos">正演正值 --</string>
+    <string name="legend_forward_neg">正演负值 --</string>
+    <string name="info_loop_coil">供圈/测圈</string>
+    <string name="info_point_line">点号/线号</string>
+    <string name="info_avg_current">平均电流</string>
+    <string name="tab_supply">供电测量</string>
+    <string name="tab_process">数据处理</string>
+    <string name="label_data_list">处理结果(道,值)：</string>
+    <string name="label_d_display">处理结果道值：</string>
+    <string name="label_forward_curve">正演曲线</string>
+    <string name="label_measured_curve">实测曲线</string>
+
+    <!-- ============ 设置/流程补充 ============ -->
+    <string name="setup_saved">设置已保存。</string>
+    <string name="setup_tag_invalid">项目标识只能是一个英文字母！</string>
+    <string name="zygs_generated">正演格式文件已生成：</string>
+    <string name="calib_done">标定系数计算完毕，且已存盘；现在，可以进行实际测量。</string>
+    <string name="serial_opened">串口已打开：%1$s</string>
+
+    <!-- ============ 充电（Form6） ============ -->
+    <string name="charge_set">设定</string>
+    <string name="charge_actual">实测</string>
+    <string name="status_charge_please_set">请设定要求的VAB，设好后点击 充电 键。</string>
+    <string name="status_charging">正在充电!请稍等...</string>
+    <string name="status_charge_done">充电完毕 !</string>
+    <string name="btn_charge_start">充  电</string>
+    <string name="charge_group">VAB</string>
+
+    <!-- ============ 波形调试（Form4，P2） ============ -->
+    <string name="btn_draw_wave">波形显示</string>
+    <string name="wave_file_missing">未找到 hz50.txt（原版写源已停用，属遗留调试文件）</string>
+
+    <!-- ============ 文件/导入导出 ============ -->
+    <string name="file_write_error">文件写入失败！</string>
+    <string name="file_read_error">文件读取失败！</string>
+    <string name="export_share">导出/分享</string>
+    <string name="import_file">导入文件</string>
+</resources>

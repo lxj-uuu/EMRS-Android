@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 主界面（Form1）：大标题区 + 六大主功能键一排 + 隐藏入口“显示波形”(P2) -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/panel_gray">
+
+    <!-- 大标题区 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.42"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_title_emrs"
+                android:textSize="52sp"
+                android:textColor="@color/emrs_red"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:text="@string/main_title_sub"
+                android:textSize="30sp"
+                android:textColor="@color/emrs_magenta" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/main_title_inst"
+            android:textSize="22sp"
+            android:textColor="@color/emrs_green" />
+    </LinearLayout>
+
+    <!-- 分隔线（等价 Panel1） -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/emrs_blue" />
+
+    <!-- 主功能键一排（等价 GroupBox1 内 Button1/8/2/3/4/6） -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.28"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <Button
+            android:id="@+id/btn_selftest"
+            style="@style/EmrsButton"
+            android:text="@string/btn_selftest" />
+
+        <Button
+            android:id="@+id/btn_charge"
+            style="@style/EmrsButton"
+            android:text="@string/btn_charge" />
+
+        <Button
+            android:id="@+id/btn_setup"
+            style="@style/EmrsButton"
+            android:text="@string/btn_setup" />
+
+        <Button
+            android:id="@+id/btn_calib"
+            style="@style/EmrsButton"
+            android:text="@string/btn_calib" />
+
+        <Button
+            android:id="@+id/btn_measure"
+            style="@style/EmrsButton"
+            android:text="@string/btn_measure" />
+
+        <Button
+            android:id="@+id/btn_exit"
+            style="@style/EmrsButton"
+            android:text="@string/btn_exit" />
+    </LinearLayout>
+
+    <!-- 底部空白 + P2 调试屏入口（原版 Button5 隐藏不可达；此处保留小号入口供联调） -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.30">
+
+        <Button
+            android:id="@+id/btn_show_wave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="12dp"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="13sp"
+            android:text="@string/btn_show_wave" />
+    </FrameLayout>
+
+</LinearLayout>

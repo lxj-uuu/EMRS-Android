@@ -1,0 +1,60 @@
+sequenceDiagram
+    autonumber
+    actor U as 操作员
+    participant M as MainScreen
+    participant S as SupplyScreen
+    participant E as ProtocolEngine
+    participant R as RxFrameParser
+    participant P as ProcessPipeline
+    participant F as ResultFiles
+    participant I as 仪器
+
+    U->>M: 点击“测量”
+    M->>M: 读 bdxs.txt→biaoding[]; mode=cl; 准备 Form5
+    M->>S: show 供电测量页(Tab0)
+    U->>S: 点击“供电开始”
+    S->>E: send(SUPPLY, supplyTimes)
+    E->>I: write A0 A0 03 03 N N AF AF
+    E-->>S: 状态“正在发命令...”
+    I-->>E: ACK($A5×16)
+    E->>S: onAck(3)→切测量态; 看门狗 6000ms
+    loop 每次供电 gdcs=1..N
+        I-->>E: 数据帧(≈2915B, 跨多块)
+        E->>R: feed(chunk)
+        R-->>E: onValidFrame(type=2)
+        E->>E: type≠1→回 ACK($A5×16)
+        E->>E: Decode→ShotData(gdcs,iabAve,v2[])
+        E-->>S: onShot: 更新 Grid8x4/已供次数; msg[2]>gdcs+1→“数据有丢失！”
+    end
+    E-->>S: onSupplyFinished “供电完毕；可进行数据处理。”
+    U->>S: 切 Tab1 → 点击“处理测量数据”
+    S->>P: runMeasure()
+    P-->>S: displ/d/memo/曲线
+    S-->>U: 状态“数据处理完毕；若结果满意，可以存盘。”
+    U->>S: 点击“存储处理结果”
+    S->>F: saveMeasureResults()
+    F-->>S: 写出 .s/.n/.c/.dat + 项目登记追加
+    S-->>U: “数据存盘成功！...”
+
+sequenceDiagram
+    autonumber
+    participant M as MainScreen
+    participant T as SelfTestScreen
+    participant E as ProtocolEngine
+    participant I as 仪器
+    U->>M: 点击“自检”
+    M->>E: send(SELF_TEST)
+    E->>I: A0 A0 01 01 AF AF
+    I-->>E: ACK
+    E->>T: onAck(1)→show; 看门狗 1000ms
+    loop 周期状态帧
+        I-->>E: type=1 帧(9B, 不回ACK)
+        E-->>T: onStatusFrame(1, vab, battery)
+        Note over E: dataCame=true 刷新看门狗
+    end
+    U->>T: 点击“返回”
+    T->>E: send(SELF_TEST_STOP) 连续2次
+    E->>I: A0 A0 02 02 AF AF (×2)
+    I-->>E: ACK
+    E->>M: onAck(2)→回主屏
+    Note over E: 若3×3000ms 无 ACK→“未收到采样机应答！”回主屏

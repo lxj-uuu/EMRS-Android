@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 应用图标（矢量，替代二进制 mipmap；API 24+ VectorDrawable 原生支持） -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 深蓝圆角底 -->
+    <path
+        android:fillColor="#1A3C6E"
+        android:pathData="M12,4 L96,4 A8,8 0 0 1 104,12 L104,96 A8,8 0 0 1 96,104 L12,104 A8,8 0 0 1 4,96 L4,12 A8,8 0 0 1 12,4 Z" />
+
+    <!-- 绿色波形 -->
+    <path
+        android:pathData="M12,66 C24,66 26,38 38,38 C50,38 52,74 64,74 C76,74 78,30 90,30"
+        android:strokeColor="#00CC66"
+        android:strokeWidth="7"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <!-- 红色基线 -->
+    <path
+        android:pathData="M12,88 L96,88"
+        android:strokeColor="#E60000"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+</vector>

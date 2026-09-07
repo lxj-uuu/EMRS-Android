@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/panel_gray">
+
+    <!-- 六屏切换容器（ScreenManager 唯一容器） -->
+    <FrameLayout
+        android:id="@+id/screen_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- 底部状态条（各屏共用，等价 Delphi 各窗体底部 tishi 状态栏） -->
+    <com.qiangyuan.emrs.ui.common.StatusBarView
+        android:id="@+id/status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+</LinearLayout>

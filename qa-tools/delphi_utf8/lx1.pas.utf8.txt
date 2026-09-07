@@ -1,0 +1,740 @@
+// 2005-11-19
+// 2006-11-19
+
+unit lx1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, ComCtrls, CommInt;
+
+type
+  TForm1 = class(TForm)
+    Label1: TLabel;
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    Button6: TButton;
+    Timer1: TTimer;
+    Timer2: TTimer;
+    tishi: TStatusBar;
+    Timer3: TTimer;
+    Label3: TLabel;
+    Timer4: TTimer;
+    Button5: TButton;
+    Button7: TButton;
+//    Comm1: TComm;
+    Button8: TButton;
+    Comm1: TComm;
+    Label4: TLabel;
+    Label5: TLabel;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Comm1RxChar(Sender: TObject; Count: Integer);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Timer3Timer(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Timer4Timer(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  prg_no,exprmt_times,points,points_end,points_end1,img_h,img_w:integer;
+  vab,dianchi,sum_i_ave:real;
+  zhengyani,v2idot,point_no:real;
+  max_v:real;
+  ruler_h:array [1..40] of integer;
+  send:array[1..100] of byte;
+  msg:array[0..5000] of byte;
+  v250hz:array[1..250] of real;
+  v2value:array[1..32,1..3200] of real;
+  biaoding:array[1..56] of real;
+  zhengyan:array[1..56] of real;
+  shjian:array[1..56] of real;
+  iab_ave:array[1..32] of real;
+  xqbc:real;
+  msg_ii:integer;
+  check_byte:byte;
+  resend_count,xx:integer;
+  old_xmbs,old_xianhao,bdcl,tmpvab,wjljv:string;
+  waiting_ack,have_head,yibiaoding,data_come:boolean;
+implementation
+
+uses lx2, lx3, lx4, lx5, lx6, math;
+
+{$R *.DFM}
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+//  form1.hide;
+//  send(self_test);
+  wjljv:=form3.wjlj.text;
+  send[1]:=$a0;
+  send[2]:=$a0;
+  send[3]:=$01;
+  send[4]:=$01;
+  send[5]:=$af;
+  send[6]:=$af;
+  Comm1.write(send,6);
+  waiting_ack:=true;
+  resend_count:=1;
+  timer3.interval:=3000;
+  timer3.enabled:=true;
+  tishi.simpletext:='正在发命令...';
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  form1.hide;
+  form3.show;
+  if form3.xmmc.canfocus then  form3.xmmc.setfocus;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+var
+  i,j:integer;
+begin
+  wjljv:=form3.wjlj.text;
+  bdcl:='bd';
+  form1.hide;
+  form5.xxh.text:=form3.xianhao.text;
+  form5.ddh.text:=form3.dianhao.text;
+  form5.xxh.Hide;
+  form5.ddh.hide;
+  form5.label22.hide;
+  form5.label23.hide;
+  form5.button2.caption:='计算标定系数';
+  form5.button5.caption:='存储标定系数';
+  form5.TabbedNotebook1.pageindex:=0;
+  tishi.simpletext:='请点击供电开始键，以正式供电、测量！';
+  for i:=0 to 7 do
+    for j:=0 to 3 do
+  form5.stringgrid2.Cells[i,j]:='';
+  form5.stringgrid2.col:=0;
+  form5.stringgrid2.row:=0;
+  form5.edit2.text:='0';
+  grid2_lie:=0;
+  grid2_hang:=0;
+  v2i_h:=0;
+  v2i_l:=0;
+  gdcs:=0;
+  dots:=1;
+  ke_sjcl:=false;
+  ke_cunpan:=false;
+  form5.d1.caption:='';
+  form5.d2.caption:='';
+  form5.d3.caption:='';
+  form5.d4.caption:='';
+  form5.d5.caption:='';
+  form5.d6.caption:='';
+  form5.d7.caption:='';
+  form5.d8.caption:='';
+  form5.d9.caption:='';
+  form5.d10.caption:='';
+  form5.d11.caption:='';
+  form5.d12.caption:='';
+  form5.d13.caption:='';
+  form5.d14.caption:='';
+  form5.d15.caption:='';
+  form5.d16.caption:='';
+  form5.d17.caption:='';
+  form5.d18.caption:='';
+  form5.d19.caption:='';
+  form5.d20.caption:='';
+  form5.d21.caption:='';
+  form5.d22.caption:='';
+  form5.d23.caption:='';
+  form5.d24.caption:='';
+  form5.d25.caption:='';
+  form5.d26.caption:='';
+  form5.d27.caption:='';
+  form5.d28.caption:='';
+  form5.d29.caption:='';
+  form5.d30.caption:='';
+  form5.d31.caption:='';
+  form5.d32.caption:='';
+  form5.timer1.enabled:=true;
+  form5.show;
+  form5.button4.SetFocus;
+  xqbc:=10;
+end;
+
+procedure TForm1.Button4Click(Sender: TObject);
+var
+  i,j,dat:integer;
+  flag:bool;
+  s,s1,nian,yue:string;
+  f:TextFile;
+begin
+  wjljv:=form3.wjlj.text;
+  bdcl:='cl';
+  form5.xxh.text:=form3.xianhao.text;
+  form5.ddh.text:=form3.dianhao.text;
+  form5.xxh.show;
+  form5.ddh.show;
+  form5.label22.show;
+  form5.label23.show;
+  s:=datetostr(date);
+  nian:='';
+  yue:='';
+  i:=1;
+  repeat
+    nian:=nian+s[i];
+    i:=i+1;
+  until s[i]='-';
+  i:=i+1;
+  repeat
+    yue:=yue+s[i];
+    i:=i+1;
+  until s[i]='-';
+
+  flag:=false;
+  Randomize;
+  dat:=strtoint(nian)*10+strtoint(yue);
+  if dat<=20053 then flag:=true;
+  if (flag=false) and (random(100)<0) then s1:=wjljv+'sxdb'+'.txt'
+    else s1:=wjljv+'bdxs'+'.txt';
+  AssignFile(F,s1);
+//  AssignFile(F,wjljv+'bdxs'+'.txt');  //  +form3.combobox1.text  2003-6-6
+  Reset(F);
+  Readln(F,points);
+  for i:=1 to points do
+    Readln(F,biaoding[i]);
+  CloseFile(F);
+
+//  AssignFile(F,'e:\emrs\'+form3.xmmc.text+form3.xianhao.text+'_'+form3.dianhao.text+'n'+ '.txt');
+//  Reset(F);
+//
+//  CloseFile(F);
+
+  yibiaoding:=true;
+  if yibiaoding=false then tishi.simpletext:='尚未标定，不能进行测量；请先标定！'
+  else
+    begin
+      form1.hide;
+      form5.tishi.simpletext:='请点击供电开始键，以正式供电、测量！';
+      for i:=0 to 7 do
+        for j:=0 to 3 do
+      form5.stringgrid2.Cells[i,j]:='';
+      form5.stringgrid2.col:=0;
+      form5.stringgrid2.row:=0;
+      form5.edit2.text:='0';
+      grid2_lie:=0;
+      grid2_hang:=0;
+      v2i_h:=0;
+      v2i_l:=0;
+      gdcs:=0;
+      dots:=1;
+      ke_sjcl:=false;
+      ke_cunpan:=false;
+      form5.button2.caption:='处理测量数据';
+      form5.button5.caption:='存储处理结果';
+      form5.TabbedNotebook1.pageindex:=0;
+   //   prg_no:=2;  //  strtoint(form3.combobox1.text)  2003-6-6, 下发时为3，成道时为2
+
+      prg_no:=strtoint(form3.combobox1.text);
+
+      exprmt_times:=strtoint(form3.combobox2.text);
+      form5.timer1.enabled:=true;
+      form5.d1.caption:='';
+      form5.d2.caption:='';
+      form5.d3.caption:='';
+      form5.d4.caption:='';
+      form5.d5.caption:='';
+      form5.d6.caption:='';
+      form5.d7.caption:='';
+      form5.d8.caption:='';
+      form5.d9.caption:='';
+      form5.d10.caption:='';
+      form5.d11.caption:='';
+      form5.d12.caption:='';
+      form5.d13.caption:='';
+      form5.d14.caption:='';
+      form5.d15.caption:='';
+      form5.d16.caption:='';
+      form5.d17.caption:='';
+      form5.d18.caption:='';
+      form5.d19.caption:='';
+      form5.d20.caption:='';
+      form5.d21.caption:='';
+      form5.d22.caption:='';
+      form5.d23.caption:='';
+      form5.d24.caption:='';
+      form5.d25.caption:='';
+      form5.d26.caption:='';
+      form5.d27.caption:='';
+      form5.d28.caption:='';
+      form5.d29.caption:='';
+      form5.d30.caption:='';
+      form5.d31.caption:='';
+      form5.d32.caption:='';
+      ke_sjcl:=false;
+      form5.show;
+      form5.button4.SetFocus;
+    end;
+end;
+
+procedure TForm1.Timer1Timer(Sender: TObject);
+begin
+  vab:=(vab+50+random(10)-5)/2;
+  form2.trackbar1.position:=25-trunc(vab/100*25);
+  form2.edit1.text:=floattostr(vab);;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+{var
+  f:TextFile;
+  tmp:string; }
+begin
+  vab:=50+random(10)-5;
+  comm1.Open;
+  xx:=0;
+  yibiaoding:=false;
+  wjljv:='c:\emrs\';
+{  AssignFile(F,'c:\emrs\gzcs.txt');
+  Reset(F);
+  Readln(F,tmp);
+  form3.xmmc.text:=tmp;
+  Readln(F,tmp);
+  form3.xianhao.text:=tmp;
+  readln(f,tmp);
+  form3.dianhao.text:=tmp;
+  readln(f,tmp);
+  form3.gongquan.text:=tmp;
+  readln(f,tmp);
+  form3.cequan.text:=tmp;
+  readln(f,tmp);
+  form3.czy.text:=tmp;
+  readln(f,tmp);
+  form3.combobox1.text:=tmp;  //
+  readln(f,tmp);
+  form3.combobox2.text:=tmp;
+  CloseFile(F);
+  old_xmmc:=form3.xmmc.text;
+  old_xianhao:=form3.xianhao.text; }
+
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Comm1.Close;
+end;
+
+procedure TForm1.Comm1RxChar(Sender: TObject; Count: Integer);
+var
+  F: TextFile;
+  recebuf:array[1..5000] of byte;
+  modify_i,sum_i,temp_i,temp_50hz,temp_v2:real;  //  2003-11-06
+  i_count,v2_count:integer;
+  ii,ij,i,j,buf_ii,msg_i,iii,j50hz:integer;
+  h,l,sgn:byte;
+  x:word;
+  xy:integer;
+  label same;
+begin
+  comm1.read(recebuf,count);
+  if waiting_ack then
+    for ii:=1 to count do
+      if recebuf[ii]=$a5 then
+        begin
+          form1.Timer3.enabled:=false;
+          waiting_ack:=false;
+          have_head:=false;
+          case send[3] of
+            4:
+              begin
+                form1.hide;
+                form6.show;
+                form6.edit2.setfocus;
+                form6.tishi.simpletext:='请设定要求的VAB，设好后点击 充电 键。';
+                data_come:=false;
+                form1.Timer4.interval:=6000;
+                form1.Timer4.enabled:=true;
+              end;
+            1:
+              begin
+                form1.hide;
+                form2.show;
+                form2.button1.setfocus;
+                form2.tishi.simpletext:='正在自检...';
+                data_come:=false;
+                form1.Timer4.interval:=1000;
+                form1.Timer4.enabled:=true;
+              end;
+            2:
+              begin
+                form2.hide;
+                form1.show;
+                tishi.simpletext:='';
+              end;
+            3:
+              begin
+                for i:=0 to 7 do
+                  for j:=0 to 3 do
+                    form5.stringgrid2.Cells[i,j]:='';
+                form5.stringgrid2.col:=0;
+                form5.stringgrid2.row:=0;
+                form5.edit2.text:='0';
+                grid2_lie:=0;
+                grid2_hang:=0;
+                v2i_h:=0;
+                v2i_l:=0;
+                gdcs:=0;
+                dots:=1;
+                form5.tishi.simpletext:='正在供电、测量...';
+                ke_cunpan:=false;
+                data_come:=false;
+                form1.Timer4.interval:=6000;
+                form1.Timer4.enabled:=true;
+              end;
+          end;
+        end;
+        begin
+          buf_ii:=1;
+          for ij:=1 to count-1 do
+            if (recebuf[ij]=$a0) and (recebuf[ij+1]=$a0) then
+              begin
+                msg_ii:=1;
+                buf_ii:=ij+2;
+                have_head:=true;
+              end;
+          if have_head and (buf_ii<=count) then
+            for ij:=buf_ii to count do
+              begin
+                msg[msg_ii]:=recebuf[ij];
+                if (msg[msg_ii-1]=$af) and (msg[msg_ii]=$af) then
+                  begin
+                    have_head:=false;
+                    check_byte:=0;
+                    for j:=1 to msg_ii-2 do
+                      check_byte:=check_byte xor msg[j];
+                    if (check_byte=$0) or (check_byte=$80) then
+                      begin
+                        if msg[1]<>1 then
+                          begin
+                            send[1]:=$a5;
+                            for j:=1 to 16 do
+                              Comm1.write(send,1);
+                          end;
+                        case msg[1] of
+                        4:
+                          begin
+                            form1.hide;
+                            form6.show;
+                            vab:=((msg[2] and $3)*256+msg[3])/1023*50;
+                            form6.trackbar1.position:=trunc(vab/60*120);
+                            vab:=trunc(vab*100)/100;
+                            form6.edit1.text:=floattostr(vab);
+                            data_come:=true;
+                            if ((msg[2] and $3)*256+msg[3])/1023*50>=strtofloat(form6.edit2.text) then
+                              begin
+                                form6.tishi.simpletext:='充电完毕 !';
+                                form6.button2.setfocus;
+                              end;
+                          end;
+
+                        1:
+                          begin
+                            form1.hide;
+                            form2.show;
+                            form2.button1.setfocus;
+                            form2.tishi.simpletext:='正在自检...';
+                            vab:=((msg[2] and $3)*256+msg[3])/1023*50;
+                            form2.trackbar1.position:=trunc(vab/60*120);
+                            vab:=trunc(vab*100)/100;
+                            form2.edit1.text:=floattostr(vab);
+                            dianchi:=((msg[4] and $3)*256+msg[5])/1023*50.45; //*105.5;
+                            dianchi:=trunc(dianchi*100)/100;
+                            form2.edit2.text:=floattostr(dianchi);
+                            data_come:=true;
+                          end;
+                        2:
+                          begin
+                            data_come:=true;
+                            form5.tishi.simpletext:='正在供电、测量...';
+                            if msg[2]=gdcs then goto same;
+                            if msg[2]>gdcs+1 then  form5.tishi.simpletext:='数据有丢失！';
+                            gdcs:=msg[2];
+                            msg_i:=3;
+                        //
+                        //    AssignFile(F,'c:\emrs\hz50.txt');
+                        //    Rewrite(F);
+                        //
+
+                        //    max_v:=0;
+
+                            for iii:=1 to 250 do
+                              begin
+                                h:=msg[msg_i];
+                                l:=msg[msg_i+1];
+                        //
+                        //        x:=h*256+l;
+                        //
+                                x:=(h and 63)*256+l;
+                                xy:=x;
+                                if (h and 32)<>0 then xy:=-(((x or 49152)  xor 65535)+1);
+                                v250hz[iii]:=xy/8191*10000000;
+                                sgn:=(h and 192);
+                                if sgn=0 then v250hz[iii]:=v250hz[iii]*1
+                                  else
+                                    if sgn=192 then v250hz[iii]:=v250hz[iii]/16384
+                                      else v250hz[iii]:=v250hz[iii]/128;
+
+                         //       if abs(v250hz[iii])>max_v then max_v:=abs(v250hz[iii]);
+
+                         //       v250hz[iii]:=100000*sin(iii/250*2*3.14159265);
+                         //
+                         //       writeln(F,v250hz[iii]);
+                         //
+                                msg_i:=msg_i+2;
+                              end;
+
+                         //     CloseFile(F);
+                         //   prg_no:=3;  // 2003-11-06
+                            // 重新又要4种：1，2，3，4 DATE(05-11-19) DATE(06-11-19)
+                            case prg_no of
+                            1:i_count:=4;
+                            2:i_count:=4;
+                            3:i_count:=4;
+                            4:i_count:=4;
+                            end;
+                            sum_i:=0;
+                            for iii:=1 to i_count do
+                              begin
+                                temp_i:=((msg[msg_i] and $3)*256+msg[msg_i+1])/1023*100; //*50;
+                                //if (msg[msg_i] and $4)<>0 then temp_i:=temp_i*10;
+                                //temp_i:=temp_i*10;// 1000
+                                //temp_i:=temp_i*20;  // 1000-->2000
+                                temp_i:=temp_i*strtoint(form3.mddl.text)/100*5/4;  //2000,4000,8000
+                                sum_i:=sum_i+temp_i;
+                                msg_i:=msg_i+2;
+                              end;
+                            modify_i:=sum_i/i_count;  //    2003-11-06
+                            modify_i:=modify_i-0.000068*modify_i*modify_i;
+
+                         //   iab_ave[gdcs]:=trunc(modify_i*100)/100;
+                            iab_ave[gdcs]:=trunc(modify_i*strtofloat(form3.bl.text)*100)/100;  // 乘以“倍率”05-11-19, 06-11-19
+
+                            sum_i_ave:=sum_i_ave+iab_ave[gdcs];
+                            form5.stringgrid2.Cells[grid2_lie,grid2_hang]:=floattostr(iab_ave[gdcs]);
+                            form5.stringgrid2.col:=grid2_lie;
+                            form5.stringgrid2.row:=grid2_hang;
+                            grid2_lie:=grid2_lie+1;
+                            if grid2_lie>=8 then
+                              begin
+                                grid2_lie:=0;
+                                grid2_hang:=grid2_hang+1;
+                              end;
+                            if grid2_hang>=4 then grid2_hang:=0;
+                            //   prg_no:=3;  //  2003-11-06
+                            // 重新又要4种：1，2，3，4 DATE(06-9-3) DATE(06-11-19)
+                            case prg_no of   // all get 1200 v2
+                            1:
+                              begin
+                                v2_count:=1200; // 253
+                                j50hz:=2;
+                              end;
+                            2:
+                              begin
+                                v2_count:=1200;  // 406
+                                j50hz:=2;
+                              end;
+                            3:
+                              begin
+                                v2_count:=1200;  // 595
+                                j50hz:=2;
+                              end;
+                            4:
+                              begin
+                                v2_count:=1200;  // 820
+                                j50hz:=2;
+                              end;
+                            end;
+                        //
+                    //        AssignFile(F,'c:\emrs\hz50.txt');
+                    //        Rewrite(F);
+                            for iii:=1 to v2_count do
+                              begin
+                                h:=msg[msg_i];
+                                l:=msg[msg_i+1];
+                        //
+                        //        form5.xsxs.text:=inttostr(h*256+l);
+                        //        form5.xsxs.refresh;
+                        //
+                                x:=(h and 63)*256+l;
+                                xy:=x;
+                                if (h and 32)<>0 then xy:=-(((x or 49152)  xor 65535)+1);
+                                temp_v2:=xy/8191*10000000;
+                                sgn:=(h and 192);
+                                if sgn=0 then temp_v2:=temp_v2*1
+                                  else
+                                    if sgn=192 then temp_v2:=temp_v2/16384
+                                      else temp_v2:=temp_v2/128;
+                           //
+                           //   form5.dydy.text:=floattostr(trunc(temp_v2*100000)/100000);
+                           //   form5.dydy.refresh;
+                           //
+                           //     v2value[gdcs,iii]:=temp_v2-v250hz[j50hz];
+                                v2value[gdcs,iii]:=temp_v2-v250hz[j50hz];
+                         //
+                         //       writeln(F,temp_v2);
+                         //
+
+                           //  v2value[gdcs,iii]:=v250hz[j50hz];
+
+                           //     if abs(temp_v2)>max_v then max_v:=abs(temp_v2);
+
+                                j50hz:=j50hz+1;
+                                if j50hz>250 then j50hz:=1;
+                                msg_i:=msg_i+2;
+                              end;
+                         //
+                         //     CloseFile(F);
+                         //
+                         //  form5.xsxs.text:=floattostr(max_v);
+
+                            form5.edit2.text:=inttostr(gdcs);
+same:                       if gdcs=strtoint(form3.ComboBox2.text) then
+                              begin
+                                form5.tishi.simpletext:='供电完毕；可进行数据处理。';
+                                ke_sjcl:=true;
+                                form1.Timer4.enabled:=false;
+                              end;
+                          end;
+                        end;
+                      end
+                      else
+                      if msg[1]<>1 then
+                        begin
+                          send[1]:=$aa;
+                          Comm1.write(send,1);
+                        end;
+                    exit;
+                  end;
+                msg_ii:=msg_ii+1;
+              end;
+        end;
+end;
+
+procedure TForm1.Timer3Timer(Sender: TObject);
+begin
+  timer3.enabled:=false;
+  if resend_count>=3 then
+    begin
+      case send[3] of
+        4:form1.tishi.simpletext:='通信有故障！';
+        1:form1.tishi.simpletext:='通信有故障！';
+        2:
+          begin
+//            form2.tishi.simpletext:='通信有故障！';
+            form2.hide;
+            form1.show;
+            form1.tishi.simpletext:='未收到采样机应答！';
+          end;
+        3:form5.tishi.simpletext:='通信有故障！';
+      end;
+    end
+    else
+      begin
+        case send[3] of
+          1:form1.Comm1.write(send,6);
+          2:form1.Comm1.write(send,6);
+          3:form1.Comm1.write(send,8);
+        end;
+        waiting_ack:=true;
+        resend_count:=resend_count+1;
+        timer3.interval:=3000;
+        timer3.enabled:=true;
+      end;
+end;
+
+procedure TForm1.Button6Click(Sender: TObject);
+//var
+//  f:TextFile;
+begin
+{  AssignFile(F,'c:\emrs\gzcs.txt');
+  Rewrite(F);
+  writeln(F,form3.xmmc.text);
+  writeln(F,form3.xianhao.text);
+  writeln(f,form3.dianhao.text);
+  writeln(f,form3.gongquan.text);
+  writeln(f,form3.cequan.text);
+  writeln(f,form3.czy.text);
+  writeln(f,form3.combobox1.text);   //
+  writeln(f,form3.combobox2.text);
+  CloseFile(F); }
+  close;
+end;
+
+procedure TForm1.Button5Click(Sender: TObject);
+begin
+  form1.hide;
+  form4.label1.visible:=false;
+  form4.label2.visible:=false;
+  form4.label3.visible:=false;
+  form4.show;
+  form4.button4.SetFocus;
+end;
+
+procedure TForm1.Timer4Timer(Sender: TObject);
+begin
+  if data_come=false then
+    begin
+      form2.tishi.simpletext:='通信中断！';
+      form5.tishi.simpletext:='通信中断！';
+      form6.tishi.simpletext:='通信中断！';
+      form1.Timer4.enabled:=false;
+    end;
+  data_come:=false;
+//  if send[3]=$02 then
+//    begin
+//      form2.hide;
+//      form1.show;
+//    end;
+end;
+
+procedure TForm1.Button7Click(Sender: TObject);
+begin
+  form1.hide;
+//  form7.show;
+end;
+
+procedure TForm1.Button8Click(Sender: TObject);
+var
+  sheding_h,sheding_l:byte;
+begin
+  wjljv:=form3.wjlj.text;
+  send[1]:=$A0;
+  send[2]:=$A0;
+  send[3]:=$04;
+  sheding_h:=0;
+  sheding_l:=0;
+  send[4]:=sheding_h;
+  send[5]:=sheding_l;
+  send[6]:=send[3] xor send[4] xor send[5];
+  send[7]:=$Af;
+  send[8]:=$Af;
+  form1.Comm1.write(send,8);
+  waiting_ack:=true;
+  resend_count:=1;
+  form1.timer3.interval:=3000;
+  form1.Timer3.enabled:=true;
+  tishi.simpletext:='正在发命令...';
+end;
+
+end.

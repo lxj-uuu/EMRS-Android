@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 充电屏（Form6）：GroupBox“VAB”：设定区(Edit2+滑条联动) / 实测区(Edit1+电压条) + 充电/退出 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/panel_gray"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@drawable/bg_panel_white"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/charge_group"
+            android:textSize="22sp"
+            android:textColor="@color/emrs_blue"
+            android:textStyle="bold" />
+
+        <!-- 设定区 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/charge_set"
+                android:textSize="19sp"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/et_target"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:background="@drawable/bg_edit"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                android:maxLength="5"
+                android:padding="6dp"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="30" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="@string/unit_v"
+                android:textSize="19sp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seek_target"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:max="120"
+            android:progress="100" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            android:background="@color/panel_gray" />
+
+        <!-- 实测区 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/charge_actual"
+                android:textSize="19sp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_actual"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:gravity="center"
+                android:background="@drawable/bg_edit"
+                android:padding="6dp"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="@string/unit_v"
+                android:textSize="19sp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <com.qiangyuan.emrs.ui.common.VBarMeter
+            android:id="@+id/vbar_actual"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+
+    <!-- 充电 / 退出（Button1/Button2） -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btn_charge_start"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="18sp"
+            android:text="@string/btn_charge_start" />
+
+        <Button
+            android:id="@+id/btn_exit2"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="18sp"
+            android:text="@string/btn_exit2" />
+    </LinearLayout>
+
+</LinearLayout>

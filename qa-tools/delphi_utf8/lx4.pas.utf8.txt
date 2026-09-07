@@ -1,0 +1,172 @@
+unit lx4;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ComCtrls, ExtCtrls;
+
+type
+  TForm4 = class(TForm)
+    Button1: TButton;
+    tishi: TStatusBar;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    PaintBox1: TPaintBox;
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form4: TForm4;
+
+implementation
+
+uses lx1;
+
+{$R *.DFM}
+
+procedure TForm4.Button1Click(Sender: TObject);
+begin
+  label1.visible:=false;
+  label2.visible:=false;
+  label3.visible:=false;
+  form4.hide;
+  form1.show;
+end;
+
+{procedure TForm4.Button2Click(Sender: TObject);
+var
+  F: TextFile;
+begin
+
+  AssignFile(F, Edit1.text + '.txt');
+  Rewrite(f);
+
+  writeln(F,x1.text);
+  writeln(F,x2.text);
+
+  CloseFile(F);
+
+end;
+
+procedure TForm4.Button3Click(Sender: TObject);
+var
+  F: TextFile;
+  s:string;
+begin
+
+   AssignFile(F, Edit1.text + '.txt');
+   Reset(F);
+
+   Readln(F,s);
+   s:=inttostr(strtoint(s));
+   y1.Text:=s;
+   s:=floattostr(strtofloat(s));
+   Readln(F,s);
+   y2.Text:=s;
+
+   CloseFile(F);
+
+end; }
+
+
+procedure TForm4.Button3Click(Sender: TObject);
+var
+  F: TextFile;
+  i,a,b:integer;
+begin
+  AssignFile(F,wjljv+'zyjg.txt');
+  Rewrite(f);
+  a:=100;
+  b:=22;
+  writeln(F,a);
+  writeln(F,b);
+  for i:=1 to 22 do
+    writeln(F,i,10000/exp((i-1)*1.6));
+    CloseFile(F);
+end;
+
+procedure TForm4.Button4Click(Sender: TObject);
+var
+  f:TextFile;
+  h,w,i,j:integer;
+  aaa,hz50_max:real;
+  wushihz:array[1..250] of real;
+begin
+  label1.visible:=false;
+  label2.visible:=false;
+  label3.visible:=false;
+  paintbox1.Refresh;
+  h:=paintbox1.height;
+  w:=paintbox1.width;
+  label1.caption:=floattostr(trunc(hz50_max));
+  label2.caption:='0';
+  label3.caption:=floattostr(-trunc(hz50_max));
+  AssignFile(F,'c:\emrs\hz50.txt');
+  Reset(F);
+  hz50_max:=0;
+  for i:=1 to 250 do
+    begin
+      Readln(F,wushihz[i]);
+      if abs(wushihz[i])>hz50_max then hz50_max:=abs(wushihz[i]);
+    end;
+  CloseFile(F);
+  if hz50_max<10 then hz50_max:=10;
+//  for j:=3 to 250-2 do
+//        begin
+     //     aaa:=(wushihz[j-2]+wushihz[j-1]+wushihz[j+1]+wushihz[j+2])/4;
+//          aaa:=(wushihz[j-1]+wushihz[j+1])/2;
+//          if abs(wushihz[j]-aaa)>0.2*aaa then
+//            begin
+//              wushihz[j]:=aaa;
+//            end;
+//        end;
+  paintbox1.canvas.pen.color:=clwhite;
+
+  paintbox1.canvas.moveto(trunc(0/250*w),0);
+  paintbox1.canvas.lineto(trunc(250/250*w),0);
+
+  paintbox1.canvas.moveto(trunc(0/250*w),h-1);
+  paintbox1.canvas.lineto(trunc(250/250*w),h-1);
+
+  paintbox1.canvas.moveto(0,0);
+  paintbox1.canvas.lineto(0,h-1);
+
+  paintbox1.canvas.pen.color:=clyellow;
+
+  paintbox1.canvas.moveto(trunc(0/250*w),trunc(h/2));
+  paintbox1.canvas.lineto(trunc(250/250*w),trunc(h/2));
+
+  for i:=1 to 250 do
+    begin
+      if wushihz[i]>0 then paintbox1.canvas.pen.color:=clred
+        else paintbox1.canvas.pen.color:=clfuchsia;
+      if i=1 then paintbox1.canvas.moveto(trunc(i/250*w),trunc(h/2-wushihz[i]/hz50_max*h/2)-1)
+        else
+          paintbox1.canvas.lineto(trunc(i/250*w),trunc(h/2-wushihz[i]/hz50_max*h/2)-1);
+    end;
+  label1.visible:=true;
+  label2.visible:=true;
+  label3.visible:=true;
+end;
+
+procedure TForm4.FormCreate(Sender: TObject);
+begin
+  label1.visible:=false;
+  label2.visible:=false;
+  label3.visible:=false;
+end;
+
+end.

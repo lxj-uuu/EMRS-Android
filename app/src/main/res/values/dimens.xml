@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 触屏最小按钮高度（UiScale.MIN_BUTTON_DP 同步） -->
+    <dimen name="min_button_h">44dp</dimen>
+</resources>

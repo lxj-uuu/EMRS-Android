@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- USB增量：支持 USB_DEVICE_ATTACHED 自动唤起的芯片清单（vendor-id/product-id 为十进制）。
+     与 UsbSerialIds.kt 保持一致，新增芯片须两处同步。 -->
+<resources>
+    <!-- CH340/CH341  0x1A86:0x7522 / 0x1A86:0x7523 -->
+    <usb-device vendor-id="6790" product-id="29986" />
+    <usb-device vendor-id="6790" product-id="29987" />
+    <!-- FTDI  0x0403:0x6001(FT232R) / 0x6010(FT2232H) / 0x6014(FT232H) / 0x6015(FT231X) -->
+    <usb-device vendor-id="1027" product-id="24577" />
+    <usb-device vendor-id="1027" product-id="24592" />
+    <usb-device vendor-id="1027" product-id="24596" />
+    <usb-device vendor-id="1027" product-id="24597" />
+    <!-- CP210x  0x10C4:0xEA60 -->
+    <usb-device vendor-id="4292" product-id="60000" />
+    <!-- PL2303  0x067B:0x2303 -->
+    <usb-device vendor-id="1659" product-id="8963" />
+</resources>

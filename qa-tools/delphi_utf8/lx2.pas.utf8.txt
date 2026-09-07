@@ -1,0 +1,75 @@
+unit lx2;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ComCtrls, ExtCtrls;
+
+type
+  TForm2 = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Edit1: TEdit;
+    TrackBar1: TTrackBar;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Button1: TButton;
+    Label7: TLabel;
+    tishi: TStatusBar;
+    Panel1: TPanel;
+    Label10: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Edit2: TEdit;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+
+implementation
+
+uses lx1;
+
+{$R *.DFM}
+
+procedure TForm2.Button1Click(Sender: TObject);
+begin
+//  form2.Hide;
+//  send_command(2);
+  send[1]:=$a0;
+  send[2]:=$a0;
+  send[3]:=$02;
+  send[4]:=$02;
+  send[5]:=$af;
+  send[6]:=$af;
+  form1.Comm1.write(send,6);
+  form1.Comm1.write(send,6);
+  waiting_ack:=true;
+  resend_count:=1;
+  form1.timer3.interval:=3000;
+  form1.Timer3.enabled:=true;
+  tishi.simpletext:='正在发命令...';
+  form1.Timer4.enabled:=false;
+//
+//  form1.show;
+end;
+
+end.

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 设置屏（Form3）：三页（图头设置/参数设置/串口设置）+ 生成正演格式 + 返回 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/panel_gray"
+    android:padding="10dp">
+
+    <!-- 页签行（等价 TabbedNotebook1 页头） -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/tab_header"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="16sp"
+            android:text="@string/tab_header" />
+
+        <Button
+            android:id="@+id/tab_params"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="16sp"
+            android:text="@string/tab_params" />
+
+        <Button
+            android:id="@+id/tab_serial"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="16sp"
+            android:text="@string/tab_serial" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_panel_white">
+
+        <!-- ===== 页0 图头设置 ===== -->
+        <ScrollView
+            android:id="@+id/page_header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_project_name" />
+                    <EditText android:id="@+id/et_project_name" style="@style/SetupEdit" android:text="青海湖" />
+                    <TextView style="@style/SetupLabel" android:text="@string/label_project_tag" />
+                    <EditText android:id="@+id/et_project_tag" style="@style/SetupEdit" android:text="q" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_work_area" />
+                    <EditText android:id="@+id/et_work_area" style="@style/SetupEdit" android:text="01" />
+                    <TextView style="@style/SetupLabel" android:text="@string/label_forward_file" />
+                    <EditText android:id="@+id/et_forward_file" style="@style/SetupEdit" android:text="zyjg1.txt" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_line_no" />
+                    <EditText android:id="@+id/et_line_no" style="@style/SetupEdit" android:text="1" />
+                    <TextView style="@style/SetupLabel" android:text="@string/label_point_no" />
+                    <EditText android:id="@+id/et_point_no" style="@style/SetupEdit" android:text="0" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_loop_side" />
+                    <EditText android:id="@+id/et_loop_side" style="@style/SetupEdit" android:text="100" />
+                    <TextView style="@style/SetupLabel" android:text="@string/label_coil_area" />
+                    <EditText android:id="@+id/et_coil_area" style="@style/SetupEdit" android:text="100" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_operator_name" />
+                    <EditText android:id="@+id/et_operator_name" style="@style/SetupEdit" android:text="李小二" />
+                    <TextView style="@style/SetupLabel" android:text="@string/label_operator_code" />
+                    <EditText android:id="@+id/et_operator_code" style="@style/SetupEdit" android:text="0001" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_file_path" />
+                    <TextView
+                        android:id="@+id/tv_file_path"
+                        style="@style/SetupEdit"
+                        android:gravity="center_vertical"
+                        android:text="" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- ===== 页1 参数设置 ===== -->
+        <ScrollView
+            android:id="@+id/page_params"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_prog_no" />
+                    <Spinner android:id="@+id/sp_prog_no" style="@style/SetupSpin" />
+                    <TextView style="@style/SetupLabel" android:text="@string/label_filter_1e2" />
+                    <Spinner android:id="@+id/sp_filter2" style="@style/SetupSpin" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_supply_times" />
+                    <Spinner android:id="@+id/sp_supply_times" style="@style/SetupSpin" />
+                    <TextView style="@style/SetupLabel" android:text="@string/label_filter_1e1" />
+                    <Spinner android:id="@+id/sp_filter3" style="@style/SetupSpin" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_ratio" />
+                    <Spinner android:id="@+id/sp_ratio" style="@style/SetupSpin" />
+                    <TextView style="@style/SetupLabel" android:text="@string/label_filter_1e0" />
+                    <Spinner android:id="@+id/sp_filter4" style="@style/SetupSpin" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_receive_mode" />
+                    <Spinner android:id="@+id/sp_receive_mode" style="@style/SetupSpin" />
+                    <TextView style="@style/SetupLabel" android:text="@string/label_filter_1em1" />
+                    <Spinner android:id="@+id/sp_filter5" style="@style/SetupSpin" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SetupRow">
+                    <TextView style="@style/SetupLabel" android:text="@string/label_full_current" />
+                    <Spinner android:id="@+id/sp_full_current" style="@style/SetupSpin" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:text="A" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- ===== 页2 串口设置（T05；USB-OTG 为 USB增量） ===== -->
+        <LinearLayout
+            android:id="@+id/page_serial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <!-- USB增量：连接方式（原生串口 / USB-OTG） -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/serial_conn_type"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+
+                <Spinner
+                    android:id="@+id/sp_conn_type"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/serial_device"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+
+                <Spinner
+                    android:id="@+id/sp_serial_device"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:text="@string/serial_baud"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+
+                <Spinner
+                    android:id="@+id/sp_serial_baud"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <Button
+                    android:id="@+id/btn_serial_refresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/min_button_h"
+                    android:background="@drawable/bg_button"
+                    android:textSize="15sp"
+                    android:text="@string/btn_serial_refresh" />
+
+                <Button
+                    android:id="@+id/btn_serial_restore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:minHeight="@dimen/min_button_h"
+                    android:background="@drawable/bg_button"
+                    android:textSize="15sp"
+                    android:text="@string/btn_serial_restore" />
+            </LinearLayout>
+
+            <!-- USB增量：USB-OTG 设备选择 + 授权并连接 -->
+            <LinearLayout
+                android:id="@+id/row_usb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/usb_device"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+
+                <Spinner
+                    android:id="@+id/sp_usb_device"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp" />
+
+                <Button
+                    android:id="@+id/btn_usb_refresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:minHeight="@dimen/min_button_h"
+                    android:background="@drawable/bg_button"
+                    android:textSize="15sp"
+                    android:text="@string/btn_usb_refresh" />
+
+                <Button
+                    android:id="@+id/btn_usb_connect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:minHeight="@dimen/min_button_h"
+                    android:background="@drawable/bg_button"
+                    android:textSize="15sp"
+                    android:text="@string/btn_usb_connect" />
+            </LinearLayout>
+
+            <!-- USB增量：未插设备/不支持等状态提示 -->
+            <TextView
+                android:id="@+id/tv_usb_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="14sp"
+                android:textColor="@color/emrs_blue" />
+
+            <TextView
+                android:id="@+id/tv_serial_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="15sp"
+                android:textColor="@color/emrs_blue" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- 底部：生成正演格式 / 返回 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btn_gen_forward"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="16sp"
+            android:text="@string/btn_gen_forward" />
+
+        <Button
+            android:id="@+id/btn_return"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="16sp"
+            android:text="@string/btn_return" />
+    </LinearLayout>
+
+</LinearLayout>

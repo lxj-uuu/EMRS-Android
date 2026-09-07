@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 供电测量/数据处理屏（Form5）：页0 供电测量 / 页1 数据处理 + 底部线号点号返回 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/panel_gray"
+    android:padding="10dp">
+
+    <!-- 页签行 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/tab_supply"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="16sp"
+            android:text="@string/tab_supply" />
+
+        <Button
+            android:id="@+id/tab_process"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="16sp"
+            android:text="@string/tab_process" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="6dp">
+
+        <!-- ===== 页0 供电测量 ===== -->
+        <LinearLayout
+            android:id="@+id/page_supply"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="6dp"
+                android:text="@string/supply_page_title"
+                android:textSize="18sp"
+                android:textColor="@color/black" />
+
+            <com.qiangyuan.emrs.ui.common.Grid8x4
+                android:id="@+id/grid_current"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/supplied_current"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_supplied"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center"
+                    android:background="@drawable/bg_edit"
+                    android:padding="4dp"
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
+                    android:text="0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:text="@string/unit_times"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/emrs_blue" />
+
+            <Button
+                android:id="@+id/btn_supply_start"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:minHeight="@dimen/min_button_h"
+                android:background="@drawable/bg_button"
+                android:textSize="17sp"
+                android:text="@string/btn_supply_start" />
+        </LinearLayout>
+
+        <!-- ===== 页1 数据处理 ===== -->
+        <LinearLayout
+            android:id="@+id/page_process"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- 图区 + 右侧信息面板/按钮 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.52"
+                android:orientation="horizontal">
+
+                <com.qiangyuan.emrs.ui.common.LogCurveView
+                    android:id="@+id/curve_view"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_plot_black" />
+
+                <LinearLayout
+                    android:layout_width="190dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp">
+
+                    <Button
+                        android:id="@+id/btn_process"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/min_button_h"
+                        android:background="@drawable/bg_button"
+                        android:textSize="15sp"
+                        android:text="@string/btn_process_measure" />
+
+                    <Button
+                        android:id="@+id/btn_save"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:minHeight="@dimen/min_button_h"
+                        android:background="@drawable/bg_button"
+                        android:textSize="15sp"
+                        android:text="@string/btn_save_measure" />
+
+                    <!-- 信息小面板（等价 Panel2） -->
+                    <TextView
+                        android:id="@+id/label_info_loop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:text="@string/info_loop_coil" />
+
+                    <TextView
+                        android:id="@+id/tv_loop_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:background="@drawable/bg_edit"
+                        android:textSize="15sp"
+                        android:textColor="@color/black"
+                        android:text="" />
+
+                    <TextView
+                        android:id="@+id/label_info_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:text="@string/info_point_line" />
+
+                    <TextView
+                        android:id="@+id/tv_point_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:background="@drawable/bg_edit"
+                        android:textSize="15sp"
+                        android:textColor="@color/black"
+                        android:text="" />
+
+                    <TextView
+                        android:id="@+id/label_info_avg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:text="@string/info_avg_current" />
+
+                    <TextView
+                        android:id="@+id/tv_avg_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:background="@drawable/bg_edit"
+                        android:textSize="15sp"
+                        android:textColor="@color/black"
+                        android:text="" />
+
+                    <!-- 图例（运行期按模式赋文本/颜色） -->
+                    <TextView
+                        android:id="@+id/tv_legend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="13sp"
+                        android:text="" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- d1..d32 数字条 与 memo 清单并排（架构 §6.3） -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.28"
+                android:orientation="horizontal"
+                android:layout_marginTop="6dp">
+
+                <GridLayout
+                    android:id="@+id/d_strip"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:columnCount="16"
+                    android:rowCount="2"
+                    android:background="@color/panel_white" />
+
+                <LinearLayout
+                    android:layout_width="230dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="@color/black"
+                        android:text="@string/label_data_list" />
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_edit">
+
+                        <TextView
+                            android:id="@+id/tv_memo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:text="" />
+                    </ScrollView>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- 底部：线号 / 点号 / 返回（Form5 窗体直属） -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:id="@+id/label_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_line"
+            android:textSize="16sp"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_line"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/bg_edit"
+            android:inputType="text"
+            android:padding="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:text="1" />
+
+        <TextView
+            android:id="@+id/label_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/label_point"
+            android:textSize="16sp"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/et_point"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/bg_edit"
+            android:inputType="text"
+            android:padding="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/btn_return"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="16sp"
+            android:text="@string/btn_return" />
+    </LinearLayout>
+
+</LinearLayout>

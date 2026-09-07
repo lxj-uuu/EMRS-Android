@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 波形调试屏（Form4，P2）：黑色绘图区 + 波形显示/退出 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/panel_gray"
+    android:padding="12dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_plot_black">
+
+        <com.qiangyuan.emrs.ui.common.WaveView
+            android:id="@+id/wave_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btn_draw_wave"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="18sp"
+            android:text="@string/btn_draw_wave" />
+
+        <Button
+            android:id="@+id/btn_exit2"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:minHeight="@dimen/min_button_h"
+            android:background="@drawable/bg_button"
+            android:textSize="18sp"
+            android:text="@string/btn_exit2" />
+    </LinearLayout>
+
+</LinearLayout>
