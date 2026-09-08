@@ -1,0 +1,24 @@
+// EMRS-Android 根构建脚本
+// 技术栈定稿（架构 §1.2）：Kotlin 1.8.x / JDK 17 / AGP 7.4.2 / Gradle 7.6.4
+buildscript {
+    ext.kotlin_version = '1.8.22'
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

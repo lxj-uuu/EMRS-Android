@@ -1,0 +1,41 @@
+PASS frame.selfTest
+PASS frame.selfTestStop
+PASS frame.supply(N=4)
+PASS frame.chargeEnter
+PASS frame.charge(30V)  | sheding=trunc(613.8)=613 H=2 L=101 chk=4^2^101=99
+PASS frame.charge(29.5V) H/L  | sheding=603
+PASS parser.A.delphi  | Delphi 语义: valid types=[1]
+PASS parser.A.kotlin  | Kotlin 语义(修复版): valid types=[1]（第1轮为 [7]，修复后应=[1]）
+PASS parser.B.delphi  | Delphi 语义: 数据A0A0重启累积→零块校验=0 判合法帧 type=[0]（原版怪癖）
+PASS parser.B.kotlin  | Kotlin 语义(修复版): valid=[0] invalid=[]（应与 Delphi 一致）
+PASS parser.C.delphi  | Delphi 语义: type=[5]
+PASS parser.C.kotlin  | Kotlin 语义(修复版): type=[5]（应=5，对应 crossBlockFeed_headerInsideDataResetsAccumulation）
+INFO  parser.D 跨块A0|A0: Delphi valid=[2] invalid=[] | Kotlin valid=[5] invalid=[]
+PASS parser.D.delphi  | Delphi 语义: 垃圾累积+A0A0 全入帧体 → 校验=0 误判合法 type=[2]（原版病态）
+PASS parser.D.kotlin-diff  | Kotlin 防御分支重启 → valid=[5]（与 Delphi 有差异，属既定修法②的已知边界，P2 记录）
+PASS parser.E.delphi  | Delphi 语义: 跨块累积出帧，校验坏 → invalid type=[1]
+PASS parser.E.kotlin  | Kotlin 语义(修复版): valid=[] invalid=[1]
+PASS parser.F.delphi  | Delphi 语义: 单A0块丢弃 → 帧丢失=[]/[]（原版怪癖，看门狗重发兜底）
+PASS parser.F.kotlin  | Kotlin 语义(修复版): 同样丢弃 → []/[]
+PASS parser.G.strict-eq-source  | strict=True 与源码 exit 语义一致: [1]
+INFO  parser.G robust(默认)=[1, 0] vs 源码=[1] —— robust 模式帧尾后残余(00,AF,AF)会再拼出幽灵帧，与源码 exit 不同（架构既定开关的已知差异，P2 记录；Engine 未显式设 strict）
+PASS parser.H.twoFrames  | 整块扫描取最后一个头 → 只解出后一帧 type=1，strict/robust 一致: [1]/[1]/[1]
+PASS scale14.zero
+PASS scale14.neg/128
+PASS scale14.pos/128
+PASS scale14.neg/16384
+PASS decode.iabAve  | modify=2500-0.000068*2500^2=2075, trunc(2075*2*100)/100=4150
+PASS replaceAve.tiebreak  | 两实现(Delphi/Kotlin)同序 tie-break → 887.5（JUnit 期望 300.0 为错误断言）
+PASS replaceAve.orderDep  | 交换输入顺序 → 101.5625（结果依赖输入顺序，源码怪癖）
+PASS smooth.glitch  | 孤立尖峰被剔除 → 10.0
+PASS sparseAve
+PASS shjian
+PASS ladder.measure
+PASS real.0.08  | 8.00000000000000E-0002
+PASS real.100  | 1.00000000000000E+0002
+PASS real.-0.352  | -3.52000000000000E-0001
+PASS vab.formula
+PASS vab.613
+PASS quirk.sFileCurrent  | s 文件供电电流写入整截断 12（非 12.34）
+
+=== 结果: 37 PASS, 0 FAIL ===

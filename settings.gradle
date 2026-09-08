@@ -1,0 +1,2 @@
+rootProject.name = "EMRS-Android"
+include ':app'
