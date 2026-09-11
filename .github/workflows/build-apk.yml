@@ -1,0 +1,149 @@
+# =============================================================================
+# EMRS-Android 云端自动打包工作流
+# -----------------------------------------------------------------------------
+# 作用：在 GitHub 的云端服务器上编译本工程，直接产出可安装的 app-debug.apk，
+#       客户无需在自己的电脑上安装 Android Studio / JDK / SDK / NDK。
+#
+# 触发方式（两种，任选其一）：
+#   1) 手动：仓库页面 → Actions → 选 "Build Android APK" → Run workflow
+#   2) 自动：向 main 分支 push 代码时自动触发
+#
+# 版本对应关系（改动前务必确认这几处一致）：
+#   app/build.gradle：compileSdk 33 / ndkVersion 21.4.7075529 / cmake 3.18.1
+#   本工作流第 4 步安装：platforms;android-33、build-tools;33.0.2、
+#                        ndk;21.4.7075529、cmake;3.18.1
+#   gradle/wrapper：Gradle 7.6.4（仓库未带 gradle-wrapper.jar，见第 5 步现场生成）
+#   JDK：17（AGP 7.4.2 + Gradle 7.6.4 要求 JDK 11 及以上，17 最稳）
+# =============================================================================
+
+name: Build Android APK
+
+on:
+  # 手动一键触发（客户主要用这个）
+  workflow_dispatch:
+  # 推代码到 main 分支时自动触发
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: 编译并打包 Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # -----------------------------------------------------------------------
+      # 第 1 步：把仓库里的工程代码拉到云端服务器
+      # -----------------------------------------------------------------------
+      - name: 1. 检出代码
+        uses: actions/checkout@v4
+
+      # -----------------------------------------------------------------------
+      # 第 2 步：安装 JDK 17（Temurin 发行版）
+      # cache: gradle 会把依赖缓存起来，第二次构建会明显变快
+      # -----------------------------------------------------------------------
+      - name: 2. 安装 JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: gradle
+
+      # -----------------------------------------------------------------------
+      # 第 3 步：安装 Android SDK 命令行工具（sdkmanager）
+      # 该动作会设置 ANDROID_HOME / ANDROID_SDK_ROOT 环境变量并把 sdkmanager
+      # 加入 PATH，后面的步骤才能用它下载 SDK 组件
+      # -----------------------------------------------------------------------
+      - name: 3. 安装 Android SDK 命令行工具
+        uses: android-actions/setup-android@v3
+
+      # -----------------------------------------------------------------------
+      # 第 4 步：下载编译需要的 SDK 组件
+      #   - platforms;android-33   ：对应 build.gradle 的 compileSdk 33
+      #   - build-tools;33.0.2     ：打 APK 用的构建工具
+      #   - ndk;21.4.7075529       ：编译自研 JNI 串口驱动（C 代码）用
+      #   - cmake;3.18.1           ：同上，对应 build.gradle 的 cmake version
+      # 注意：必须先接受许可协议，否则 sdkmanager 会卡住或报错
+      # 若 Google 下架了 ndk;21.4.7075529，请把 app/build.gradle 的 ndkVersion
+      # 改成 25.2.9519653、cmake version 改成 3.22.1，并同步修改本步的包名
+      # -----------------------------------------------------------------------
+      - name: 4. 下载 SDK 组件（平台 / 构建工具 / NDK / CMake）
+        run: |
+          set -e
+          # 自动接受全部 SDK 许可协议（两种方式都写上，兼容不同版本 sdkmanager）
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager --install "platform-tools" \
+                              "platforms;android-33" \
+                              "build-tools;33.0.2" \
+                              "ndk;21.4.7075529" \
+                              "cmake;3.18.1"
+          echo "已安装的 SDK 组件："
+          sdkmanager --list_installed
+
+      # -----------------------------------------------------------------------
+      # 第 5 步：补齐 Gradle Wrapper
+      # 本仓库因二进制分发限制没有 gradle-wrapper.jar，云端也没有，
+      # 所以这里先下载 Gradle 7.6.4 发行版，用它在“临时空目录”里生成
+      # 一套完整的 wrapper 文件（gradle/ 目录 + gradlew + gradlew.bat），
+      # 再拷贝回工程根目录。放在空目录生成是为了避免触发工程本身的构建配置
+      # -----------------------------------------------------------------------
+      - name: 5. 生成 Gradle Wrapper（仓库未带 gradle-wrapper.jar）
+        run: |
+          set -e
+          mkdir -p /tmp/gradle-gen
+          cd /tmp/gradle-gen
+          curl -sSL -o gradle.zip https://services.gradle.org/distributions/gradle-7.6.4-bin.zip
+          unzip -q gradle.zip
+          ./gradle-7.6.4/bin/gradle wrapper --gradle-version 7.6.4 --distribution-type bin
+          cp -r /tmp/gradle-gen/gradle /tmp/gradle-gen/gradlew /tmp/gradle-gen/gradlew.bat "$GITHUB_WORKSPACE/"
+          chmod +x "$GITHUB_WORKSPACE/gradlew"
+          cd "$GITHUB_WORKSPACE"
+          ./gradlew --version
+
+      # -----------------------------------------------------------------------
+      # 第 6 步：真正开始编译
+      #   test         ：跑单元测试（算法 / 协议 / USB 波特率分频）
+      #   assembleDebug：打 Debug 包，产物 app/build/outputs/apk/debug/app-debug.apk
+      # --no-daemon 是为了在云端一次性构建环境里更省内存、日志更完整
+      # -----------------------------------------------------------------------
+      - name: 6. 运行单元测试并打包 Debug APK
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon test assembleDebug
+
+      # -----------------------------------------------------------------------
+      # 第 7 步：确认 APK 真的生成了（打印出来，方便在日志里核对）
+      # -----------------------------------------------------------------------
+      - name: 7. 查看构建产物
+        run: |
+          echo "=== APK 列表 ==="
+          ls -lh app/build/outputs/apk/debug/
+          echo "=== 单元测试报告 ==="
+          ls -R app/build/reports/tests 2>/dev/null | head -n 20 || true
+
+      # -----------------------------------------------------------------------
+      # 第 8 步：把 APK 作为构建产物上传
+      # 构建结束后在 Actions → 本次运行记录 → 页面最下方 Artifacts 区
+      # 点 “EMRS-debug-apk” 即可下载（下载到的是一个 zip，解压后是 app-debug.apk）
+      # -----------------------------------------------------------------------
+      - name: 8. 上传 APK 产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: EMRS-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+          if-no-files-found: error
+
+      # -----------------------------------------------------------------------
+      # 第 9 步：只有构建失败时才执行——上传日志/报告，方便排查原因
+      # （构建成功时会跳过本步，不影响结果）
+      # -----------------------------------------------------------------------
+      - name: 9. 失败时上传排查用报告
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: EMRS-build-reports
+          path: |
+            app/build/reports
+            .gradle/daemon/*/*.log
+          retention-days: 7
+          if-no-files-found: ignore
